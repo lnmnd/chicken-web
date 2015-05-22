@@ -37,4 +37,6 @@ foreman start
 
 Pass env vars:
 
+```sh
 CHICKEN_REPOSITORY=$PWD/vendor PORT=5000 csi -s web.scm
+```
