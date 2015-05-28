@@ -21,17 +21,16 @@
 		       (a (@ (href "/about")) "about"))
 		 ,content))))))
 
-  ;; sxml -> response
-  (define (sxml->response sxml)
+  (define (respond body)
     (send-response
-     body: (build-page sxml)))
-
+     body: body))
+  
   (define-syntax page
     (syntax-rules ()
       ((_ name args body)
        (define (name)
 	 (lambda args
-	   (sxml->response body))))))
+	   (respond (build-page body)))))))
   
   (define (li-item x)
     `(li (a (@ (href ,(conc "/item/" x))) ,x)))
