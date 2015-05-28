@@ -26,26 +26,27 @@
     (send-response
      body: (build-page sxml)))
 
+  (define-syntax page
+    (syntax-rules ()
+      ((_ name args body)
+       (define (name)
+	 (lambda args
+	   (sxml->response body))))))
+  
   (define (li-item x)
     `(li (a (@ (href ,(conc "/item/" x))) ,x)))
-    
-  (define (main-page)
-    (let ((items '(1 2 3 4)))
-      (lambda (c)
-	(sxml->response
-	 `(div (h2 "main page")
-	       (ul ,(map li-item items)))))))
 
-  (define (item-page)
-    (lambda (c item)
-      (sxml->response
-       `(div (h2 (conc "item " ,item))
-	     (p "item stuff")))))
+  (page main-page (c)
+	(let ((items '(1 2 3 4)))
+	  `(div (h2 "main page")
+		(ul ,(map li-item items)))))
 
-  (define (about-page)
-    (lambda (c)
-      (sxml->response
-       `(div (h2 "about page")
-	     (p "about stuff")))))
+  (page item-page (c item)
+	`(div (h2 (conc "item " ,item))
+	      (p "item stuff")))
+
+  (page about-page (c)
+	`(div (h2 "about page")
+	      (p "about stuff")))
 
   )
